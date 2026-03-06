@@ -1,0 +1,20 @@
+<h1>物件一覧</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>物件名</th>
+      <th>住所</th>
+      <th>価格</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @properties.each do |property| %>
+      <tr>
+        <td><%= property.name %></td>
+        <td><%= property.address %></td>
+        <td><%= number_to_currency(property.price, unit: "¥", precision: 0) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
