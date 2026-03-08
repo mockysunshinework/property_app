@@ -16,7 +16,7 @@
         <% end %>
       </tr>
       <tr>
-        <td><%= property.name %></td>
+        <td><%= link_to property.name, property_path(property) %></td>
         <td><%= property.address %></td>
         <td><%= number_to_currency(property.price, unit: "¥", precision: 0) %></td>
       </tr>

@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-  get "properties/index"
-  get "home/index"
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -10,7 +8,7 @@ Rails.application.routes.draw do
 
   root "home#index"
 
-  resources :properties, only: [ :index ]
+  resources :properties, only: [ :index, :show ]
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
