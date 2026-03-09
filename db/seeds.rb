@@ -7,7 +7,7 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-Property.delete_all
+#
 ADDRESS_LISTS = [
   '東京都渋谷区渋谷',
   '東京都世田谷区世田谷',
@@ -20,16 +20,45 @@ STATION_LISTS = [
   '目黒'
 ].freeze
 
-(1..100).each { |i|
+# 管理者ユーザーを作成
+admin_user = User.find_or_initialize_by(email: 'admin1@email.com')
+
+admin_user.password = 'admin1111'
+admin_user.password_confirmation = 'admin1111'
+admin_user.confirmed_at = Time.current
+admin_user.admin = true
+admin_user.save!
+
+# 物件を作成
+(1..10).each { |i|
   address = ADDRESS_LISTS[i % ADDRESS_LISTS.size]
   station = STATION_LISTS[i % STATION_LISTS.size]
+  property = Property.find_or_initialize_by(name: "サンプル物件#{i}")
 
-  Property.find_or_create_by!(
-    name: "サンプル物件#{i}",
-    address: "#{address}#{i}-1",
-    price: 30_000_000 + i * 1_000_000,
-    description: "詳細説明#{i}",
-    minutes_by_walk: i * 2,
-    nearest_station: station
-  )
+  property.name = "サンプル物件#{i}"
+  property.address = "#{address}#{i}-1"
+  property.price = 30_000_000 + i * 1_000_000
+  property.description = "詳細説明#{i}"
+  property.minutes_by_walk = i * 2
+  property.nearest_station = station
+  property.save!
+
+  property.images.purge
+
+  image_paths = [
+    Rails.root.join("db/seeds/properties/property_#{i}_1.jpg"),
+    Rails.root.join("db/seeds/properties/property_#{i}_2.jpg"),
+    Rails.root.join("db/seeds/properties/property_#{i}_3.jpg"),
+    Rails.root.join("db/seeds/properties/property_#{i}_4.jpg")
+  ]
+
+  image_paths.each  { |image_path|
+    next unless File.exist?(image_path)
+
+    property.images.attach(
+      io: File.open(image_path),
+      filename: File.basename(image_path),
+      content_type: "image/jpeg"
+    )
+  }
 }

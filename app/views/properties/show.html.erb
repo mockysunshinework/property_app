@@ -9,9 +9,9 @@
 
 <h2>物件画像</h2>
 <% if @property.images.attached? %>
-  <div>
+  <div class="property-images">
     <% @property.images.each do |image| %>
-      <%= image_tag image.variant(resize_to_limit: [800, 600]) %>
+      <%= image_tag image.variant(:detail) %>
     <% end %>
   </div>
 <% else %>

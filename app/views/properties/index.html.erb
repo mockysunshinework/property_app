@@ -6,19 +6,22 @@
       <th>物件名</th>
       <th>住所</th>
       <th>価格</th>
+      <th>物件画像</th>
     </tr>
   </thead>
   <tbody>
     <% @properties.each do |property| %>
       <tr>
-        <% if property.images.attached? %>
-          <%= image_tag property.images.first.variant(resize_to_limit: [120, 120]) %>
-        <% end %>
-      </tr>
-      <tr>
         <td><%= link_to property.name, property_path(property) %></td>
         <td><%= property.address %></td>
         <td><%= number_to_currency(property.price, unit: "¥", precision: 0) %></td>
+        <td>
+          <% if property.images.attached? %>
+            <%= image_tag property.images.first.variant(:thumb) %>
+          <% else %>
+            <p>画像データはありません</p>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
