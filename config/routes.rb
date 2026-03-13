@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   root "home#index"
 
-  resources :properties, only: [ :index, :show ]
+  resources :properties
 
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
