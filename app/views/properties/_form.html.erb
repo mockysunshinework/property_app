@@ -1,0 +1,51 @@
+<%= form_with model: property do |f| %>
+  <% if property.errors.any? %>
+    <div>
+      <h2><%= property.errors.count %>件のエラーがあります</h2>
+      <ul>
+        <% property.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name, "物件名" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :address, "所在地" %><br>
+    <%= f.text_field :address %>
+  </div>
+
+  <div>
+    <%= f.label :price, "価格" %><br>
+    <%= f.number_field :price %>
+  </div>
+
+  <div>
+    <%= f.label :description, "詳細説明" %><br>
+    <%= f.text_area :description %>
+  </div>
+
+  <div>
+    <%= f.label :nearest_station, "最寄駅" %><br>
+    <%= f.text_area :nearest_station %>
+  </div>
+
+  <div>
+    <%= f.label :minutes_by_walk, "徒歩〜分" %><br>
+    <%= f.text_area :minutes_by_walk %>
+  </div>
+
+  <div>
+    <%= f.label :images, "画像" %><br>
+    <%= f.file_field :images, multiple: true, accept: "image/*" %>
+  </div>
+
+  <div>
+    <%= f.submit '登録' %>
+  </div>
+<% end %>
