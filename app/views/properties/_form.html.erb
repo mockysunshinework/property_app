@@ -41,7 +41,19 @@
   </div>
 
   <div>
-    <%= f.label :images, "画像" %><br>
+    <p>物件画像</p>
+    <% if @property.images.attached? %>
+      <div class="property-images">
+        <% @property.images.each do |image| %>
+          <%= image_tag image.variant(:thumb) %>
+        <% end %>
+      </div>
+    <% else %>
+      <p>画像データはありません</p>
+    <% end %>
+  </div>
+  <div>
+    <%= f.label :images, "物件画像を追加する" %><br>
     <%= f.file_field :images, multiple: true, accept: "image/*" %>
   </div>
 

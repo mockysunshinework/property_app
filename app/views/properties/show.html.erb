@@ -19,3 +19,11 @@
 <% end %>
 
 <p><%= link_to '物件一覧に戻る', properties_path %></p>
+
+<P>
+  <% if user_signed_in? && current_user.admin? %>
+  <%= link_to '編集', edit_property_path(@property) %>
+  <%= link_to '削除', property_path(@property), data: { turbo_method: :delete, turbo_confirm: '本当に削除しますか？' } %>
+  <% end %>
+
+</P>

@@ -1,5 +1,10 @@
 <h1>物件一覧</h1>
 
+<% if user_signed_in? && current_user.admin? %>
+  <p><%= link_to '物件を登録する', new_property_path%></p>
+  <%= button_to 'logout', destroy_user_session_path, method: :delete %>
+<% end %>
+
 <table>
   <thead>
     <tr>
