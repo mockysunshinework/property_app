@@ -22,11 +22,14 @@ STATION_LISTS = [
 
 # 管理者ユーザーを作成
 admin_user = User.find_or_initialize_by(email: 'admin1@email.com')
+password = ENV.fetch("ADMIN_PASSWORD") { raise '環境変数が設定されていません' }
 
-admin_user.password = 'admin1111'
-admin_user.password_confirmation = 'admin1111'
-admin_user.confirmed_at = Time.current
-admin_user.admin = true
+admin_user.assign_attributes(
+  password: password,
+  password_confirmation: password,
+  confirmed_at: Time.current,
+  admin: true
+)
 admin_user.save!
 
 # 物件を作成

@@ -22,8 +22,10 @@ services:
       - db
     volumes:
       - .:/rails
+      - bundle_data:/usr/local/bundle
     stdin_open: true
     tty: true
 
 volumes:
   pgdata:
+  bundle_data:
