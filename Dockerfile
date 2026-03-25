@@ -24,7 +24,7 @@ RUN apt-get update -qq && \
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development" \
+    BUNDLE_WITHOUT="development:test" \
     LD_PRELOAD="/usr/local/lib/libjemalloc.so"
 
 # Throw-away build stage to reduce size of final image
@@ -51,8 +51,21 @@ COPY . .
 # -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/rails/bootsnap/issues/495
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
+ARG APP_HOST
+ARG APP_PROTOCOL=https
+ARG DB_HOST=dummy-db-host
+ARG DB_PORT=5432
+ARG DB_NAME=app_production
+ARG DB_USERNAME=app
+
+ENV APP_HOST=$APP_HOST
+ENV APP_PROTOCOL=$APP_PROTOCOL
+ENV DB_HOST=$DB_HOST
+ENV DB_PORT=$DB_PORT
+ENV DB_NAME=$DB_NAME
+ENV DB_USERNAME=$DB_USERNAME
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN APP_DATABASE_PASSWORD=dummy-password SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 
 
@@ -72,6 +85,5 @@ COPY --chown=rails:rails --from=build /rails /rails
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start server via Thruster by default, this can be overwritten at runtime
-EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+EXPOSE 3000
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]

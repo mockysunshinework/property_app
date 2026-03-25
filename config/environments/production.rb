@@ -22,7 +22,7 @@ Rails.application.configure do
   # config.asset_host = "http://assets.example.com"
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
-  config.active_storage.service = :local
+  config.active_storage.service = ENV.fetch("ACTIVE_STORAGE_SERVICE", "local").to_sym
 
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.
   # config.assume_ssl = true
@@ -61,7 +61,7 @@ Rails.application.configure do
   # メール内URL生成（confirmable / recoverable で必須）
   config.action_mailer.default_url_options = {
     host: ENV.fetch("APP_HOST"), # 例）：　example.com
-    protcol: ENV.fetch("APP_PROTOCOL", "https")
+    protocol: ENV.fetch("APP_PROTOCOL", "https")
   }
 
   # Specify outgoing SMTP server. Remember to add smtp/* credentials via bin/rails credentials:edit.
@@ -100,4 +100,9 @@ Rails.application.configure do
   #
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  # 以下の二つの記述はawsにデプロイするにあたり記述した。理由は現状不明。
+  # 参考： https://chatgpt.com/c/69acc8f9-8e44-83a9-a827-b6f512e5ecc7
+  config.require_master_key = false
+  config.public_file_server.enabled = true
 end

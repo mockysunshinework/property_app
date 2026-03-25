@@ -1,8 +1,10 @@
 #!/bin/bash -e
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
+rm -f /rails/tmp/pids/server.pid
+
+if [ "$1" = "bundle" ] && [ "$2" = "exec" ] && [ "$3" = "rails" ] && [ "$4" = "server" ]; then
+  ./bin/rails db:migrate
+  # ./bin/rails db:seed # adminデータを投入する時だけコメントアウトを不活性にする。
 fi
 
 exec "${@}"
